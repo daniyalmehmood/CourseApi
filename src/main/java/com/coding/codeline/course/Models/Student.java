@@ -16,10 +16,9 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
-    @Column(name = "student_name")
+
     String name;
 
-    @Column(name = "student_rollNumber")
     String rollNumber;
 
 
