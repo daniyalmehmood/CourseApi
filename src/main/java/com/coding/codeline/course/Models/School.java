@@ -23,7 +23,8 @@ public class School {
     @Column(name = "school_name")
     String name;
 
-
+    @OneToMany
+    @JoinColumn(referencedColumnName = "id")
     List<Student> students;
 
 

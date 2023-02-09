@@ -23,6 +23,8 @@ public class Student {
 
     String rollNumber;
 
+    @OneToMany
+    @JoinColumn(referencedColumnName = "id")
     List<Course> courses;
 
 
