@@ -23,9 +23,9 @@ public class Student {
 
     String rollNumber;
 
-    @OneToMany
-    @JoinColumn(referencedColumnName = "id")
-    List<Course> courses;
+    @ManyToOne
+    @JoinColumn(name = "school_id", referencedColumnName = "id")
+    School school;
 
 
 }

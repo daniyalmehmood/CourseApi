@@ -19,7 +19,7 @@ public class Course {
 
     String name;
 
-    @OneToMany
-    @JoinColumn(referencedColumnName = "id")
-    List<Mark> marks;
+    @ManyToOne
+    @JoinColumn(name = "student_id", referencedColumnName = "id")
+    Student student;
 }
