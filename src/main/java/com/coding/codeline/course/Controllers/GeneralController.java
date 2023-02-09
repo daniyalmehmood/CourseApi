@@ -1,11 +1,13 @@
 package com.coding.codeline.course.Controllers;
 
+import com.coding.codeline.course.Models.School;
+import com.coding.codeline.course.Services.SchoolService;
 import com.coding.codeline.course.Services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class GeneralController {
@@ -13,21 +15,23 @@ public class GeneralController {
     @Autowired
     StudentService studentService;
 
-    @RequestMapping()
-    public void addStudent() {
-        studentService.addStudent();
-        studentService.addStudent();
+    @Autowired
+    SchoolService schoolService;
+
+    //School Apis
+
+    @RequestMapping(value = "school/getAll", method = RequestMethod.GET)
+    public List<School> getAllSchools(){
+        List<School> schools = new ArrayList<>();
+        schools = schoolService.getAllSchools();
+        return schools;
     }
 
-    @GetMapping(value = "deleteById")
-    public String deleteStudentById(@RequestParam Integer id) {
-        studentService.deleteStudentById(id);
-        return "Record Deleted Successfully :)";
-    }
 
 
-    @GetMapping(value = "student")
-    public String helloStudent() {
-        return "Hello Student";
-    }
+
+
+    //Student Apis
+    //Course Apis
+    //Mark Apis
 }
