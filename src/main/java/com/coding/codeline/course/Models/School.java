@@ -7,23 +7,24 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.List;
 
+
 @Getter
 @Setter
 @Data
 
+
 @Entity
-public class Student {
+public class School {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    @Column(name = "student_name")
+    @Column(name = "school_name")
     String name;
 
-    String rollNumber;
 
-    List<Course> courses;
+    List<Student> students;
 
 
 }
