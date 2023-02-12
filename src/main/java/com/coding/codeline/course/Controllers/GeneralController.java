@@ -26,6 +26,11 @@ public class GeneralController {
         schools = schoolService.getAllSchools();
         return schools;
     }
+    @RequestMapping(value = "school/getById", method = RequestMethod.GET)
+    public School getSchoolById(@RequestParam Integer schoolId){
+        School school = schoolService.getSchoolById(schoolId);
+        return school;
+    }
 
 
 
