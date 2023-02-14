@@ -23,4 +23,7 @@ public interface SchoolRepository extends JpaRepository<School, Integer> {
             "WHERE s.name = :schoolName")
     School getBySchoolName(@Param("schoolName") String schoolName);
 
+    @Query(value = "SELECT s from School s where s.isActive = true")
+    List<School> getAllActiveSchools();
+
 }

@@ -22,4 +22,14 @@ public class SchoolService {
         School school = schoolRepository.getSchoolById(id);
         return school;
     }
+
+    public School getSchoolByName(String schoolName){
+        School school = schoolRepository.getBySchoolName(schoolName);
+        return school;
+    }
+
+    public List<School> getAllActiveSchools(){
+
+        return schoolRepository.getAllActiveSchools();
+    }
 }
