@@ -38,4 +38,8 @@ public class StudentService {
         List<Student> studentList = studentRepository.getStudentsBySchoolId(schoolId);
         return studentList;
     }
+
+    public List<Student> getAllStudents(){
+        return studentRepository.findAll();
+    }
 }

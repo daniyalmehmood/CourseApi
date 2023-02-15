@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -17,7 +18,13 @@ public class StudentController {
     @Autowired
     StudentService studentService;
 
-    @RequestMapping(value = "student/getStudentsBySchoolName", method = RequestMethod.GET)
+    @RequestMapping(value = "getAll", method = RequestMethod.GET)
+    public List<Student> getAllStudents() {
+        List<Student> studentList = studentService.getAllStudents();
+        return studentList;
+    }
+
+    @RequestMapping(value = "getBySchoolName", method = RequestMethod.GET)
     public List<Student> getStudentsBySchoolName(@RequestParam String schoolName) {
         return studentService.getStudentsBySchoolName(schoolName);
     }
