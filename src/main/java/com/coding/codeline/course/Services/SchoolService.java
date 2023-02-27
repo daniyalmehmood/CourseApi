@@ -5,6 +5,10 @@ import com.coding.codeline.course.Repositories.SchoolRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -13,23 +17,31 @@ public class SchoolService {
     @Autowired
     SchoolRepository schoolRepository;
 
-    public List<School> getAllSchools(){
+    public List<School> getAllSchools() {
 
         return schoolRepository.getAllSchools();
     }
 
-    public School getSchoolById(Integer id){
+    public School getSchoolById(Integer id) {
         School school = schoolRepository.getSchoolById(id);
         return school;
     }
 
-    public School getSchoolByName(String schoolName){
+    public School getSchoolByName(String schoolName) {
         School school = schoolRepository.getBySchoolName(schoolName);
         return school;
     }
 
-    public List<School> getAllActiveSchools(){
+    public List<School> getAllActiveSchools() {
 
         return schoolRepository.getAllActiveSchools();
+    }
+
+    public void setCreatedDateByUserInput(String date, Integer id) throws ParseException {
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date convertedDateFromStringToDateFormat = formatter.parse(date);
+        School school = schoolRepository.getSchoolById(id);
+        school.setCreatedDate(convertedDateFromStringToDateFormat);
+        schoolRepository.save(school);
     }
 }

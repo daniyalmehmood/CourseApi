@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +20,9 @@ public class SchoolController {
     @Autowired
     SchoolService schoolService;
 
+    //localhost:8080/school/getAll
 
-    @RequestMapping(value = "school/getAll", method = RequestMethod.GET)
+    @RequestMapping(value = "getAll", method = RequestMethod.GET)
     public List<School> getAllSchools() {
         List<School> schools = new ArrayList<>();
         schools = schoolService.getAllSchools();
@@ -35,14 +37,23 @@ public class SchoolController {
     }
 
     @RequestMapping(value = "getByName")
-    public School getSchoolByName(@RequestParam String schoolName){
+    public School getSchoolByName(@RequestParam String schoolName) {
         School school = schoolService.getSchoolByName(schoolName);
         return school;
     }
 
     @RequestMapping(value = "getAllSchoolByIsActive")
-    public List<School> getAllActiveSchools(){
-        List<School>  activeSchoolsList = schoolService.getAllActiveSchools();
+    public List<School> getAllActiveSchools() {
+        List<School> activeSchoolsList = schoolService.getAllActiveSchools();
         return activeSchoolsList;
     }
+
+    @RequestMapping(value = "updateCreatedDateByUserInput")
+    public void setCreatedDateByUserInput(@RequestParam String date,
+                                          @RequestParam Integer id) throws ParseException {
+        schoolService.setCreatedDateByUserInput(date, id);
+
+    }
+
+
 }
