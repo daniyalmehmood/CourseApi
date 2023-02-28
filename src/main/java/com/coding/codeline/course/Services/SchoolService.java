@@ -37,11 +37,11 @@ public class SchoolService {
         return schoolRepository.getAllActiveSchools();
     }
 
-    public void setCreatedDateByUserInput(String date, Integer id) throws ParseException {
+    public void setCreatedDateByUserInput(String stringData, Integer id) throws ParseException {
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date convertedDateFromStringToDateFormat = formatter.parse(date);
+        Date javaDate = formatter.parse(stringData);
         School school = schoolRepository.getSchoolById(id);
-        school.setCreatedDate(convertedDateFromStringToDateFormat);
+        school.setCreatedDate(javaDate);
         schoolRepository.save(school);
     }
 }

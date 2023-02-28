@@ -1,12 +1,10 @@
 package com.coding.codeline.course.Controllers;
 
 import com.coding.codeline.course.Models.School;
+import com.coding.codeline.course.RequestObjects.SchoolRequestForCreateDateUpdate;
 import com.coding.codeline.course.Services.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -49,9 +47,9 @@ public class SchoolController {
     }
 
     @RequestMapping(value = "updateCreatedDateByUserInput")
-    public void setCreatedDateByUserInput(@RequestParam String date,
-                                          @RequestParam Integer id) throws ParseException {
-        schoolService.setCreatedDateByUserInput(date, id);
+    public void setCreatedDateByUserInput(@RequestBody SchoolRequestForCreateDateUpdate data)
+            throws ParseException {
+        schoolService.setCreatedDateByUserInput(data.getDate(), data.getId());
 
     }
 
