@@ -53,5 +53,12 @@ public class SchoolController {
 
     }
 
+    @RequestMapping(value = "getSchoolByNumberOfStudent", method = RequestMethod.POST)
+    public List<School> getSchoolByNumberOfStudent(@RequestParam Integer numberOfStudent) {
+        List<School> schoolList = new ArrayList<>();
+        return schoolList;
+    }
+
 
 }
+
