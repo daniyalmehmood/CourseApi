@@ -32,8 +32,7 @@ public class EmailService implements EmailRepository {
         try {
 
             // Creating a simple mail message
-            SimpleMailMessage mailMessage
-                    = new SimpleMailMessage();
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
 
             List<String> mailingList = emailDetails.getRecipient();
             for (String email : mailingList) {
@@ -60,8 +59,7 @@ public class EmailService implements EmailRepository {
     public String sendMailWithAttachmentToMany(EmailDetails emailDetails) {
 
         // Creating a mime message
-        MimeMessage mimeMessage
-                = mailSender.createMimeMessage();
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper;
 
         try {
@@ -69,25 +67,18 @@ public class EmailService implements EmailRepository {
 
             // Setting multipart as true for attachments to
             // be send
-            mimeMessageHelper
-                    = new MimeMessageHelper(mimeMessage, true);
+            mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setFrom(sender);
-
             mimeMessageHelper.setText(emailDetails.getMsgBody());
-            mimeMessageHelper.setSubject(
-                    emailDetails.getSubject());
+            mimeMessageHelper.setSubject(emailDetails.getSubject());
 
             // Adding the attachment
-            FileSystemResource file
-                    = new FileSystemResource(
-                    new File(emailDetails.getAttachment()));
+            FileSystemResource file = new FileSystemResource(new File(emailDetails.getAttachment()));
 
-            mimeMessageHelper.addAttachment(
-                    file.getFilename(), file);
+            mimeMessageHelper.addAttachment(file.getFilename(), file);
 
             // Sending the mail
-            for (String email : mailingList
-            ) {
+            for (String email : mailingList) {
                 mimeMessageHelper.setTo(email);
                 mailSender.send(mimeMessage);
             }
