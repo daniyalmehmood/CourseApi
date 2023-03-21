@@ -9,7 +9,6 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Data
-
 @Entity
 public class Student extends BaseEntity {
 

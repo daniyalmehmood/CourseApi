@@ -11,7 +11,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -66,5 +65,22 @@ public class SchoolService {
 
         List<School> schoolThatUserWasLookingFor = schoolRepository.findAllById(schoolIdsThatUserWants);
         return schoolThatUserWasLookingFor;
+    }
+
+    public StringBuilder formatSchoolObjectForSlack(School school){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Id: *" + school.getId() + "*\n");
+        sb.append("School Name: *" + school.getName() + "*\n");
+        sb.append("Is Active: *" + school.getIsActive() + "*\n");
+        return sb;
+    }
+
+    public StringBuilder formatSchoolListForSlack(List<School> schools){
+        StringBuilder mainStringBuilder = new StringBuilder();
+        for (School schoolFromListOfSchools: schools) {
+            mainStringBuilder.append(formatSchoolObjectForSlack(schoolFromListOfSchools));
+            mainStringBuilder.append("\n");
+        }
+        return mainStringBuilder;
     }
 }

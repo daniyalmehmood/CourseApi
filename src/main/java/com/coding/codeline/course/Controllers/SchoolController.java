@@ -3,6 +3,7 @@ package com.coding.codeline.course.Controllers;
 import com.coding.codeline.course.Models.School;
 import com.coding.codeline.course.RequestObjects.SchoolRequestForCreateDateUpdate;
 import com.coding.codeline.course.Services.SchoolService;
+import com.coding.codeline.course.Slack.SlackClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,12 +19,16 @@ public class SchoolController {
     @Autowired
     SchoolService schoolService;
 
+    @Autowired
+    SlackClient slackClient;
+
     //localhost:8080/school/getAll
 
     @RequestMapping(value = "getAll", method = RequestMethod.GET)
     public List<School> getAllSchools() {
         List<School> schools = new ArrayList<>();
         schools = schoolService.getAllSchools();
+        slackClient.sendMessage(schoolService.formatSchoolListForSlack(schools).toString());
         return schools;
     }
 
@@ -31,6 +36,8 @@ public class SchoolController {
     @RequestMapping(value = "getById", method = RequestMethod.GET)
     public School getSchoolById(@RequestParam Integer schoolId) {
         School school = schoolService.getSchoolById(schoolId);
+        slackClient.sendMessage(schoolService.formatSchoolObjectForSlack(school).toString());
+
         return school;
     }
 
@@ -53,7 +60,7 @@ public class SchoolController {
 
     }
 
-    @RequestMapping(value = "getSchoolByNumberOfStudent", method = RequestMethod.POST)
+    @RequestMapping(value = "getSchoolByNumberOfStudent")
     public List<School> getSchoolByNumberOfStudent(@RequestParam Integer numberOfStudent) {
        List<School> schoolList=schoolService.getSchoolByNumberOfStudent(numberOfStudent);
        return schoolList;
