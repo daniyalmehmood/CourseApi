@@ -16,7 +16,9 @@ public class CourseController {
     CourseService courseService;
 
     @RequestMapping(value = "getById", method = RequestMethod.GET)
-    public Course getCourseById(@RequestParam Integer courseId) {
+    public Course getCourseById(@RequestParam Integer courseId) throws Exception {
+        if(courseId == 0)
+            throw new Exception();
        return courseService.getCourseById(courseId);
 
     }

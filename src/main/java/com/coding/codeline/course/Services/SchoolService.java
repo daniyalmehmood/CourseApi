@@ -75,6 +75,7 @@ public class SchoolService {
         return sb;
     }
 
+
     public StringBuilder formatSchoolListForSlack(List<School> schools){
         StringBuilder mainStringBuilder = new StringBuilder();
         for (School schoolFromListOfSchools: schools) {

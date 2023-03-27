@@ -44,12 +44,14 @@ public class SchoolController {
     @RequestMapping(value = "getByName")
     public School getSchoolByName(@RequestParam String schoolName) {
         School school = schoolService.getSchoolByName(schoolName);
+        slackClient.sendMessage(schoolService.formatSchoolObjectForSlack(school).toString());
         return school;
     }
 
     @RequestMapping(value = "getAllSchoolByIsActive")
     public List<School> getAllActiveSchools() {
         List<School> activeSchoolsList = schoolService.getAllActiveSchools();
+        slackClient.sendMessage(schoolService.formatSchoolListForSlack(activeSchoolsList).toString());
         return activeSchoolsList;
     }
 
@@ -63,6 +65,7 @@ public class SchoolController {
     @RequestMapping(value = "getSchoolByNumberOfStudent")
     public List<School> getSchoolByNumberOfStudent(@RequestParam Integer numberOfStudent) {
        List<School> schoolList=schoolService.getSchoolByNumberOfStudent(numberOfStudent);
+        slackClient.sendMessage(schoolService.formatSchoolListForSlack(schoolList).toString());
        return schoolList;
     }
 
