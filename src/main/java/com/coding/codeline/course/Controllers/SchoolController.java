@@ -2,11 +2,14 @@ package com.coding.codeline.course.Controllers;
 
 import com.coding.codeline.course.Models.School;
 import com.coding.codeline.course.RequestObjects.SchoolRequestForCreateDateUpdate;
+import com.coding.codeline.course.Services.ReportService;
 import com.coding.codeline.course.Services.SchoolService;
 import com.coding.codeline.course.Slack.SlackClient;
+import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FileNotFoundException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +24,9 @@ public class SchoolController {
 
     @Autowired
     SlackClient slackClient;
+
+    @Autowired
+    ReportService reportService;
 
     //localhost:8080/school/getAll
 
@@ -67,6 +73,11 @@ public class SchoolController {
        List<School> schoolList=schoolService.getSchoolByNumberOfStudent(numberOfStudent);
         slackClient.sendMessage(schoolService.formatSchoolListForSlack(schoolList).toString());
        return schoolList;
+    }
+
+    @RequestMapping(value = "report")
+    public String generateSchoolsReport() throws JRException, FileNotFoundException {
+        return reportService.generateReport();
     }
 
 

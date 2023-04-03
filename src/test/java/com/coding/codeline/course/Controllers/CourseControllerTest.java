@@ -21,6 +21,14 @@ class CourseControllerTest {
     }
 
     @Test
+    void getCourseByIdWhenIdZero() throws Exception {
+        Course courseToTest = courseController.getCourseById(0);
+        assertEquals(null , courseToTest);
+    }
+
+
+
+    @Test
     void getCourseByIdThrowsErrorOnInvalidId() throws Exception {
         assertThrows(Exception.class, (Executable) courseController.getCourseById(0));
     }
