@@ -1,8 +1,12 @@
 package com.coding.codeline.course.Services;
 
+import com.coding.codeline.course.DTO.CourseMarkDTO;
 import com.coding.codeline.course.DTO.StudentSchoolDTO;
+import com.coding.codeline.course.DTO.StudentWithSchoolNameDTO;
+import com.coding.codeline.course.Models.*;
 import com.coding.codeline.course.Models.School;
 import com.coding.codeline.course.Models.Student;
+import com.coding.codeline.course.Repositories.MarkRepository;
 import com.coding.codeline.course.Repositories.SchoolRepository;
 import com.coding.codeline.course.Repositories.StudentRepository;
 import com.coding.codeline.course.RequestObjects.SchoolRequest;
@@ -26,6 +30,9 @@ public class ReportService {
 
     @Autowired
     SchoolRepository schoolRepository;
+
+    @Autowired
+    MarkRepository markRepository;
 
     @Autowired
     StudentRepository studentRepository;
@@ -65,5 +72,52 @@ public class ReportService {
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,parameters , dataSource);
         JasperExportManager.exportReportToPdfFile(jasperPrint, pathToReports+"\\schools.pdf");
         return "Report generated : " + pathToReports+"\\schools.pdf";
+    }
+
+    public String generateReportForStudentWithSchoolName() throws Exception{
+
+        List<Student> students = studentRepository.findAll();
+        List<StudentWithSchoolNameDTO> studentSchoolNameDtosList = new ArrayList<>();
+        for (Student student: students) {
+
+            StudentWithSchoolNameDTO dto = new StudentWithSchoolNameDTO(student.getSchool().getName(),
+                    student.getName(),
+                    student.getRollNumber());
+
+            studentSchoolNameDtosList.add(dto);
+        }
+
+        File file = new File("C:\\Users\\MuhammadDaniyal\\Downloads\\Daniyal\\CourseApi\\src\\main\\resources\\StudentWithSchoolName.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(studentSchoolNameDtosList);
+        Map<String, Object> paramters = new HashMap<>();
+        paramters.put("CreatedBy", "Daniyal");
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,paramters , dataSource);
+        JasperExportManager.exportReportToPdfFile(jasperPrint, pathToReports+"\\studentSchoolReport.pdf");
+        return "Report generated : " + pathToReports+"\\studentSchoolReport.pdf";
+
+    }
+    public String generateReportForCourseMark() throws Exception{
+
+        List<Mark> mark = markRepository.findAll();
+        List<CourseMarkDTO> courseMarkDTOS = new ArrayList<>();
+        for (Mark mark1: mark) {
+
+            CourseMarkDTO dto = new CourseMarkDTO(mark1.getCourse().getName(),
+                    mark1.getObtainedMarks(),
+                    mark1.getGrade());
+
+            courseMarkDTOS.add(dto);
+        }
+
+        File file = new File("C:\\Users\\MuhammadDaniyal\\Downloads\\Daniyal\\CourseApi\\src\\main\\resources\\StudentWithSchoolName.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(courseMarkDTOS);
+        Map<String, Object> paramters = new HashMap<>();
+        paramters.put("CreatedBy", "Daniyal");
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,paramters , dataSource);
+        JasperExportManager.exportReportToPdfFile(jasperPrint, pathToReports+"\\courseMark.pdf");
+        return "Report generated : " + pathToReports+"\\courseMark.pdf";
+
     }
 }
