@@ -37,6 +37,7 @@ public class ReportService {
     StudentRepository studentRepository;
     @Autowired
     CourseRepository courseRepository;
+
     public String reportPrinting(JRBeanCollectionDataSource dataSource, String jasperReportName, String fileName) throws Exception {
         File file = new File("C:\\Users\\MuhammadDaniyal\\Downloads\\Daniyal\\CourseApi\\src\\main\\resources\\" + jasperReportName + ".jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
@@ -46,6 +47,7 @@ public class ReportService {
         JasperExportManager.exportReportToPdfFile(jasperPrint, pathToReports + "\\" + fileName + ".pdf");
         return "Report generated : " + pathToReports + "\\" + fileName + ".pdf";
     }
+
     public String generateReport() throws FileNotFoundException, JRException {
 
         List<School> schoolList = schoolRepository.getAllSchools();
@@ -172,23 +174,37 @@ public class ReportService {
         }
         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(studentOverAllPerformanceDTOS);
 
-        return reportPrinting(dataSource,"OverallStudentPerformance","OverAllStudentPerformance");
+        return reportPrinting(dataSource, "OverallStudentPerformance", "OverAllStudentPerformance");
 
     }
-    public String totalCountOfStudents()throws Exception{
+
+    public String totalCountOfStudents() throws Exception {
         List<School> schoolList = schoolRepository.getAllSchools();
         List<CountOfStudentWithSchoolDTO> countOfStudent = new ArrayList<>();
-        for (School school:schoolList) {
+        for (School school : schoolList) {
             Integer schoolId = school.getId();
             String schoolName = school.getName();
             Integer countOfStudents = studentRepository.getCountOfStudentsBySchoolId(schoolId);
-            CountOfStudentWithSchoolDTO countOfStudentWithSchoolDTO = new CountOfStudentWithSchoolDTO(countOfStudents,schoolName);
+            CountOfStudentWithSchoolDTO countOfStudentWithSchoolDTO = new CountOfStudentWithSchoolDTO(countOfStudents, schoolName);
             countOfStudent.add(countOfStudentWithSchoolDTO);
         }
         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(countOfStudent);
-        return reportPrinting(dataSource,"CountOfStudentsBySchool","CountOfStudentsBySchool");
+        return reportPrinting(dataSource, "CountOfStudentsBySchool", "CountOfStudentsBySchool");
     }
 
+    public String getTheDistributionOfGrades() throws Exception {
+        List<String> coursesNames = courseRepository.getAllCoursesNames();
+        List<String> listOfUniqueGrades = markRepository.getDistinctGrades();
+        List<CourseWithGradesDTO> courseWithGradesDTOS = new ArrayList<>();
+        for (String course : coursesNames) {
+            for (String grade : listOfUniqueGrades) {
+                Integer count = markRepository.getCountOfMarksByGradeAndCourseName(grade, course);
+                courseWithGradesDTOS.add(new CourseWithGradesDTO(course, count, grade));
+            }
+        }
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(courseWithGradesDTOS);
+        return reportPrinting(dataSource, "TheDistributionOfGrades", "TheDistributionOfGrades");
+    }
 
 }
 

@@ -67,4 +67,14 @@ public class ReportController {
 
         }
     }
+    @RequestMapping(method = RequestMethod.GET, value = "TheDistributionOfGrades")
+    public String generateTheDistributionOfGrades() {
+        try {
+            return reportService.getTheDistributionOfGrades();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new Exception("Error").getMessage();
+
+        }
+    }
 }

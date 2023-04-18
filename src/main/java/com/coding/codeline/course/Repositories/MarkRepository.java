@@ -21,4 +21,8 @@ public interface MarkRepository extends JpaRepository<Mark, Integer> {
     @Query(value = "select avg(m.obtainedMarks) from Mark m where m.course.student.id  = :studentId ")
     Integer getAvgOfMarksByStudentId(@Param("studentId") Integer studentId);
 
+    @Query(value = " select Distinct(m.grade) from Mark m ")
+    List<String> getDistinctGrades();
+    @Query(value = " select count(m) from Mark m where m.course.name = :courseName And m.grade = :grade ")
+    Integer getCountOfMarksByGradeAndCourseName(@Param("grade")String grade ,@Param("courseName")String courseName);
 }
