@@ -14,7 +14,7 @@ public class ReportController {
     ReportService reportService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/getStudentSchoolNameReport")
-    public String getReportForStudentSchoolName(){
+    public String getReportForStudentSchoolName() {
 
 
         try {
@@ -26,12 +26,10 @@ public class ReportController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/generateReportForCourseMark")
-    public String generateReportForCourseMark(){
-
-
+    @RequestMapping(method = RequestMethod.GET, value = "ReportForAverageMarks")
+    public String generateReportForCourseMark() {
         try {
-            return reportService.generateReportForCourseMark();
+            return reportService.generateAverageMarkReport();
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return new Exception("Error").getMessage();

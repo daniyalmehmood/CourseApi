@@ -14,7 +14,10 @@ public class CourseMarkDTO {
     String courseName;
     Integer obtainedMarks;
     String grade;
+    Integer averageMark;
 
-
-
+    public CourseMarkDTO(String courseName, Integer averageMark) {
+        this.courseName = courseName;
+        this.averageMark = averageMark;
+    }
 }
