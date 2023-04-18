@@ -15,11 +15,10 @@ public class CourseController {
     @Autowired
     CourseService courseService;
 
-    @RequestMapping(value = "getById", method = RequestMethod.GET)
-    public Course getCourseById(@RequestParam Integer courseId) throws Exception {
-        if(courseId == 0)
-            throw new Exception();
-       return courseService.getCourseById(courseId);
+    @RequestMapping(value = "getById")
+    public Course getCourseById(@RequestParam Integer courseId) {
+
+        return courseService.getCourseById(courseId);
 
     }
 }

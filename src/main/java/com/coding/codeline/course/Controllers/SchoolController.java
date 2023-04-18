@@ -39,11 +39,9 @@ public class SchoolController {
     }
 
 
-    @RequestMapping(value = "getById", method = RequestMethod.GET)
+    @GetMapping(value = "getById")
     public School getSchoolById(@RequestParam Integer schoolId) {
         School school = schoolService.getSchoolById(schoolId);
-        slackClient.sendMessage(schoolService.formatSchoolObjectForSlack(school).toString());
-
         return school;
     }
 

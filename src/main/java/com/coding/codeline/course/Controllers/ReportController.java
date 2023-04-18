@@ -36,4 +36,35 @@ public class ReportController {
 
         }
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "generateTopPerformingStudentReport")
+    public String generateTopPerformingStudentReport() {
+        try {
+            return reportService.generateTopPerformingStudentReport();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new Exception("Error").getMessage();
+
+        }
+    }
+    @RequestMapping(method = RequestMethod.GET, value = "generateOverAllPerformanceForEachStudent")
+    public String generateOverAllPerformanceForEachStudent() {
+        try {
+            return reportService.overAllPerformanceForEachStudent();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new Exception("Error").getMessage();
+
+        }
+    }
+    @RequestMapping(method = RequestMethod.GET, value = "CountOfStudentWithSchool")
+    public String generateCountOfStudentWithSchool() {
+        try {
+            return reportService.totalCountOfStudents();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new Exception("Error").getMessage();
+
+        }
+    }
 }

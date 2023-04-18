@@ -1,8 +1,6 @@
 package com.coding.codeline.course.Services;
 
-import com.coding.codeline.course.DTO.CourseMarkDTO;
-import com.coding.codeline.course.DTO.StudentSchoolDTO;
-import com.coding.codeline.course.DTO.StudentWithSchoolNameDTO;
+import com.coding.codeline.course.DTO.*;
 import com.coding.codeline.course.Models.*;
 import com.coding.codeline.course.Models.School;
 import com.coding.codeline.course.Models.Student;
@@ -39,8 +37,17 @@ public class ReportService {
     StudentRepository studentRepository;
     @Autowired
     CourseRepository courseRepository;
-
+    public String reportPrinting(JRBeanCollectionDataSource dataSource, String jasperReportName, String fileName) throws Exception {
+        File file = new File("C:\\Users\\MuhammadDaniyal\\Downloads\\Daniyal\\CourseApi\\src\\main\\resources\\" + jasperReportName + ".jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("CreatedBy", "Daniyal");
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+        JasperExportManager.exportReportToPdfFile(jasperPrint, pathToReports + "\\" + fileName + ".pdf");
+        return "Report generated : " + pathToReports + "\\" + fileName + ".pdf";
+    }
     public String generateReport() throws FileNotFoundException, JRException {
+
         List<School> schoolList = schoolRepository.getAllSchools();
 
         File file = ResourceUtils.getFile("classpath:School_Report.jrxml");
@@ -119,4 +126,69 @@ public class ReportService {
         JasperExportManager.exportReportToPdfFile(jasperPrint, pathToReports + "\\courseAverageMark.pdf");
         return "Report generated : " + pathToReports + "\\courseAverageMark.pdf";
     }
+
+    public String generateTopPerformingStudentReport() throws JRException {
+
+        List<School> schoolList = schoolRepository.findAll();
+        Map<School, Student> schoolStudentMap = new HashMap<>();
+        List<TopPreformingStudentDTO> topPreformingStudentDTOSList = new ArrayList<>();
+
+        for (School school : schoolList) {
+            List<Student> studentList = studentRepository.getStudentsBySchoolId(school.getId());
+            Integer highestMarks = 0;
+            Student studentWithHighestMarks = new Student();
+            for (Student student : studentList) {
+                Integer studentId = student.getId();
+                Integer studentTotalMark = markRepository.getSumOfMarksByStudentId(studentId);
+                if (studentTotalMark > highestMarks) {
+                    highestMarks = studentTotalMark;
+                    studentWithHighestMarks = student;
+                }
+            }
+            schoolStudentMap.put(school, studentWithHighestMarks);
+            topPreformingStudentDTOSList.add(new TopPreformingStudentDTO(school.getName(), studentWithHighestMarks.getName()));
+        }
+
+        File file = new File("C:\\Users\\MuhammadDaniyal\\Downloads\\Daniyal\\CourseApi\\src\\main\\resources\\TopPreformingStudent.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(topPreformingStudentDTOSList);
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("CreatedBy", "Daniyal");
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+        JasperExportManager.exportReportToPdfFile(jasperPrint, pathToReports + "\\TopPreformingStudent.pdf");
+        return "Report generated : " + pathToReports + "\\TopPreformingStudent.pdf";
+    }
+
+    public String overAllPerformanceForEachStudent() throws Exception {
+        List<Student> studentList = studentRepository.findAll();
+        List<StudentOverAllPerformanceDTO> studentOverAllPerformanceDTOS = new ArrayList<>();
+        for (Student student : studentList) {
+            Integer studentId = student.getId();
+            String studentName = student.getName();
+            String studentRollNumber = student.getRollNumber();
+            Integer studentAverageMarks = markRepository.getAvgOfMarksByStudentId(studentId);
+            StudentOverAllPerformanceDTO dto = new StudentOverAllPerformanceDTO(studentName, studentRollNumber, studentAverageMarks);
+            studentOverAllPerformanceDTOS.add(dto);
+        }
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(studentOverAllPerformanceDTOS);
+
+        return reportPrinting(dataSource,"OverallStudentPerformance","OverAllStudentPerformance");
+
+    }
+    public String totalCountOfStudents()throws Exception{
+        List<School> schoolList = schoolRepository.getAllSchools();
+        List<CountOfStudentWithSchoolDTO> countOfStudent = new ArrayList<>();
+        for (School school:schoolList) {
+            Integer schoolId = school.getId();
+            String schoolName = school.getName();
+            Integer countOfStudents = studentRepository.getCountOfStudentsBySchoolId(schoolId);
+            CountOfStudentWithSchoolDTO countOfStudentWithSchoolDTO = new CountOfStudentWithSchoolDTO(countOfStudents,schoolName);
+            countOfStudent.add(countOfStudentWithSchoolDTO);
+        }
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(countOfStudent);
+        return reportPrinting(dataSource,"CountOfStudentsBySchool","CountOfStudentsBySchool");
+    }
+
+
 }
+

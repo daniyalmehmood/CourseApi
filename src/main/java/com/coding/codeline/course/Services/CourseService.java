@@ -14,7 +14,7 @@ public class CourseService {
     CourseRepository courseRepository;
 
     public Course getCourseById(Integer id){
-        Course course = courseRepository.getCourseById(id);
+        Course course = courseRepository.getById(id);
         return course;
     }
 }
